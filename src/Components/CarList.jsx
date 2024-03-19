@@ -24,11 +24,11 @@ export default function CarList(){
         {field: 'fuel'},
         {field: 'modelYear'},
         {field: 'price'},
-        {sortable: false, filter: false,
+        {sortable: false, filter: false, headerCheckboxSelection: false,
             cellRenderer: (params)=>{
                 return(<EditCar car={params.data} editCar={editCar} />);
         }},
-        {sortable: false, filter: false,
+        {sortable: false, filter: false, headerCheckboxSelection: false,
         cellRenderer: (params)=>{
             return(
                 <>
@@ -41,7 +41,7 @@ export default function CarList(){
         flex:1,
         sortable: true,
         filter:true,
-        floatingFilter: true
+        floatingFilter: true,
     };
     useEffect(() => fetchData(), []);
 
@@ -114,6 +114,9 @@ export default function CarList(){
                     rowData={cars}
                     columnDefs={columnDefs}
                     defaultColDef={defaultColDef}
+                    pagination= {true}
+                    paginationPageSizeSelector= {false}
+                    paginationPageSize={6}
                 />
             </div> 
             <Snackbar
