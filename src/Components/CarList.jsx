@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import DownloadIcon from '@mui/icons-material/Download';
 import Snackbar from '@mui/material/Snackbar';
 import AddNewCar from './AddNewCar';
+import EditCar from './EditCar';
 import { Stack } from '@mui/material';
 
 export default function CarList(){
@@ -24,13 +25,17 @@ export default function CarList(){
         {field: 'modelYear'},
         {field: 'price'},
         {sortable: false, filter: false,
+            cellRenderer: (params)=>{
+                return(<EditCar car={params.data} editCar={editCar} />);
+        }},
+        {sortable: false, filter: false,
         cellRenderer: (params)=>{
             return(
                 <>
-                <Button variant='contained' size="small" color='error' onClick={()=>handleDeleteRow(params.data._links.self.href)}>Delete</Button>
+                <Button size="small" color='error' onClick={()=>handleDeleteRow(params.data._links.self.href)}>Delete</Button>
                 </>
             );
-        }}
+        }},
     ]);
     const defaultColDef ={
         flex:1,
@@ -61,6 +66,18 @@ export default function CarList(){
             .catch(err => console.error(err))
         setOpen(true);
         }
+    }
+    const editCar = (car, link)=> {
+        fetch(link, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(car)
+        })
+        .then(response => fetchData())
+        .catch(err => console.error(err))
+
     }
     const saveCar = (car) => {
         fetch('https://carrestservice-carshop.rahtiapp.fi/cars', {
